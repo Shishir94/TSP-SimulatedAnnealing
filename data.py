@@ -1,14 +1,14 @@
 import pandas
 import matplotlib.pyplot as plt
 
-def parse_data(filename):
+def parseData(filename):
     df = pandas.read_csv(filename)
-    optimal_cost = df['x'][0] #Gets the optimal route distance from the dataset
+    optimalCost = df['x'][0] #Gets the optimal route distance from the dataset
     df = df[:][1:] #considers all the points apart from the first element
-    return optimal_cost, df
+    return optimalCost, df
 
-def read_data():
+def readData():
     filename = "djibouti.csv"
-    optimal_cost, df = parse_data(filename)
+    optimalCost, df = parseData(filename)
     #plot_cities(df)
-    return df,optimal_cost
+    return df,optimalCost
