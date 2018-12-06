@@ -4,12 +4,15 @@ import random
 import numpy as np
 from data import *
 
-def costFunction(df, distanceMatrix):
+def costFunction(dfNew):
     """
     This accepts the current data frame as it is along with the euclidean
     distances between the points and returns the current cost of traversal
     """
-    return
+    reCalc = 0
+    for i in range(1,len(dfNew)):
+        reCalc += euclideanDistance(dfNew.ix[i]['x'],dfNew.ix[i]['y'],dfNew.ix[i+1]['x'],dfNew.ix[i+1]['y'])
+    return reCalc
 
 def calculateDistances(df):
     """
@@ -27,26 +30,39 @@ def selectCities(x,y):
         b = np.random.randint(x,y)
     return a,b
 
-def newCostCalc(df, curCost,a,b):
+def newCostCalc(dfNew, curCost,a,b):
     """
     Function to calculate the traversal distance after switching two cities at random
     """
+    a1,a2,a3 = dfNew.iloc[a-2],dfNew.iloc[a-1],dfNew.iloc[a]
+    b1,b2,b3 = dfNew.iloc[b-2],dfNew.iloc[b-1],dfNew.iloc[b]
+    reCalc = curCost
+    reCalc = reCalc - euclideanDistance(a1['x'],a1['y'],a2['x'],a2['y'])
+    reCalc = reCalc - euclideanDistance(a2['x'],a2['y'],a3['x'],a3['y'])
+    reCalc = reCalc - euclideanDistance(b1['x'],b1['y'],b2['x'],b2['y'])
+    reCalc = reCalc - euclideanDistance(b2['x'],b2['y'],b3['x'],b3['y'])
 
-    a1 = [df.ix[a-1]['x'],df.ix[a-1]['y']]
-    a2 = [df.ix[a]['x'],df.ix[a]['y']]
-    a3 = [df.ix[a+1]['x'],df.ix[a+1]['y']]
-    b1 = [df.ix[b-1]['x'],df.ix[b-1]['y']]
-    b2 = [df.ix[b]['x'],df.ix[b]['y']]
-    b3 = [df.ix[b+1]['x'],df.ix[b+1]['y']]
-    recalc = curCost
-    recalc -= (euclideanDistance(a1[0],a1[1],a2[0],a2[1]) + euclideanDistance(a2[0],a2[1],a3[0],a3[1]))
-    recalc -= (euclideanDistance(b1[0],b1[1],b2[0],b2[1]) + euclideanDistance(b2[0],b2[1],b3[0],b3[1]))
-    recalc += (euclideanDistance(a1[0],a1[1],b2[0],b2[1]) + euclideanDistance(b2[0],b2[1],a3[0],a3[1]))
-    recalc += (euclideanDistance(b1[0],b1[1],a2[0],a2[1]) + euclideanDistance(a2[0],a2[1],b3[0],b3[1]))
-    return recalc
+    x, y = dfNew.iloc[a-1].copy(), dfNew.iloc[b-1].copy()
+    dfNew.iloc[a-1],dfNew.iloc[b-1] = y,x
+
+    a1,a2,a3 = dfNew.iloc[a-2],dfNew.iloc[a-1],dfNew.iloc[a]
+    b1,b2,b3 = dfNew.iloc[b-2],dfNew.iloc[b-1],dfNew.iloc[b]
+
+    reCalc = reCalc + euclideanDistance(a1['x'],a1['y'],a2['x'],a2['y'])
+    reCalc = reCalc + euclideanDistance(a2['x'],a2['y'],a3['x'],a3['y'])
+    reCalc = reCalc + euclideanDistance(b1['x'],b1['y'],b2['x'],b2['y'])
+    reCalc = reCalc + euclideanDistance(b2['x'],b2['y'],b3['x'],b3['y'])
+
+    x, y = dfNew.iloc[a-1].copy(), dfNew.iloc[b-1].copy()
+    dfNew.iloc[a-1],dfNew.iloc[b-1] = y,x
+
+    return reCalc
 
 def acceptanceProbability(newCost, curCost, temperature):
-        return math.exp(((-(curCost - newCost))/temperature))
+        if(newCost < curCost):
+            return 1.0
+        else:
+            return math.exp(((-(newCost - curCost))/temperature))
 
 def euclideanDistance(x1,y1,x2,y2):
     """
