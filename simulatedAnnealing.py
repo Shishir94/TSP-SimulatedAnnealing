@@ -17,9 +17,10 @@ def simulateAnnealing(df,optimalCost, initialCost):
     curCost = initialCost
     newCost = 0
     #Create a simulateAnnealingData object consisting of the parameter values
-    saData = simulateAnnealingData(temperature=3, epoch = 100, alpha = 0.05)
+    saData = simulateAnnealingData(temperature=100, epoch = 10, alpha = 0.999)
     while(saData.temperature >= saData.alpha):
         print("Current Temperature = ",saData.temperature)
+        print("Current Lowest Cost = ",curCost)
         print("...")
         for i in range(1,saData.epoch+1):
             a,b = selectCities(2,len(df)-1)
@@ -29,7 +30,7 @@ def simulateAnnealing(df,optimalCost, initialCost):
                 curCost = newCost
                 x, y = df.iloc[a-1].copy(), df.iloc[b-1].copy()
                 df.iloc[a-1],df.iloc[b-1] = y,x
-        saData.temperature -= saData.alpha
+        saData.temperature *= saData.alpha
     print(df)
     print(curCost)
     print("---------------")

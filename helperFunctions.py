@@ -23,11 +23,14 @@ def calculateDistances(df):
     return
 
 def selectCities(x,y):
-    a = np.random.randint(x,y)
-    b = np.random.randint(x,y)
+    a = random.randrange(x, y, 1)
+    b = random.randrange(x, y, 1)
+    #a = np.random.randint(x,y)
+    #b = np.random.randint(x,y)
     #Loop to ensure the two randomly selected cities are different.
     while a == b:
-        b = np.random.randint(x,y)
+        b = random.randrange(x, y, 1)
+        #b = np.random.randint(x,y)
     return a,b
 
 def newCostCalc(dfNew, curCost,a,b):
