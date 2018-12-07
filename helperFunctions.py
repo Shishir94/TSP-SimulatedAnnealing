@@ -1,8 +1,18 @@
 import pandas
 import math
 import random
+import matplotlib.pyplot as plt
 import numpy as np
 from data import *
+
+"""def plot_cities(df):
+    plt.pause(0.01)
+    plt.clf()
+    plt.plot(df[:]['x'], df[:]['y'])
+    plt.show()
+    plt.pause(0.01)
+    plt.clf()"""
+
 
 def costFunction(dfNew):
     """
@@ -74,9 +84,12 @@ def euclideanDistance(x1,y1,x2,y2):
     distance = math.sqrt(abs(math.pow((x2-x1),2)) + abs(math.pow((y2-y1),2)))
     return distance
 
-def dataInitialization():
-    df,optimalCost = readData()
+def initialCostCalc(df):
     initialCost = 0
     for i in range(1,len(df)):
         initialCost += euclideanDistance(df.ix[i]['x'],df.ix[i]['y'],df.ix[i+1]['x'],df.ix[i+1]['y'])
-    return df,optimalCost,initialCost
+    return initialCost
+
+def dataInitialization():
+    df,optimalCost = readData()
+    return df, optimalCost
