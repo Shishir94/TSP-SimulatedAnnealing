@@ -8,7 +8,7 @@ def parseData(filename):
     return optimalCost, df
 
 def readData():
-    filename = "djibouti.csv"
+    filename = "custom.csv"
     optimalCost, df = parseData(filename)
     #plot_cities(df)
     return df,optimalCost
